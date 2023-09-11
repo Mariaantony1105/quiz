@@ -1,6 +1,8 @@
 let quizCards = document.querySelector(".quizCards");
 let currentQuestion = 0;
 let quizData;
+var totalScore=0;
+
 
 fetch("script.json")
   .then((res) => res.json())
@@ -12,10 +14,9 @@ fetch("script.json")
 function display(data) {
   if (currentQuestion < data.length) {
     let card = data[currentQuestion];
-
     let div = document.createElement("div");
     div.innerHTML = `
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         <div class="card-body">
           <h5 class="card-title">Question No: ${card.id}</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">Easy</h6>
@@ -40,13 +41,17 @@ function display(data) {
               <input class="form-check-input" type="radio" name="quizOption" id="option4" value="${card.option4}" data-target="${card.correctOption}">
               <label class="form-check-label" for="option4">${card.option4}</label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+           <div class="text-center mt-2">
+           <button type="submit"class="btn btn-primary w-100 text-center">Submit</button>
+          </div>
+            </form>
         </div>
       </div>`;
     quizCards.appendChild(div);
   } else {
-    quizCards.innerHTML = "<p>Quiz completed! Thank you.</p>";
+    quizCards.innerHTML = `<p>Quiz completed! Thank you.</p>
+   
+    <h1> totalScore ${totalScore} / 10 </h1>`;
   }
 }
 
@@ -62,18 +67,33 @@ function submitBtn(event) {
 
     if (userAnswer === correctAnswer) {
       alert("Correct! Well done!");
+      // correctAnswers++;
+    
+      console.log("correct",totalScore++);
     } else {
+    //  wrongAnswers++;
+     console.log("wrong",totalScore--);
       const explanation = quizData[currentQuestion].Explanation;
 
-      alert(
-        `Incorrect. The correct answer is: ${correctAnswer}\n\nExplanation: ${explanation}`
-      );
+      quizCards.innerHTML = ` 
+      <div class="toasts">
+      <div class="toast-header">
+        <strong class="me-auto">Incorrect.</strong>
+        The correct answer is:
+      </div>
+      <div class="toast-body">
+      ${correctAnswer}\n\nExplanation: ${explanation}
+      </div>
+      </div>
+      
+      `;
     }
     setTimeout(() => {
       currentQuestion++;
       quizCards.innerHTML = "";
       display(quizData);
-    }, 5000);
+      
+    }, 3000);
   } else {
     alert("Please select an option.");
   }
