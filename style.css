@@ -1,13 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=PT+Serif&family=Poppins:wght@100&display=swap");
+
 *,
 ::after,
-::before{
-    padding: 0;
-    margin: 0;
+::before {
+  padding: 0;
+  margin: 0;
+}
+body{
+    font-family: 'Montserrat', sans-serif;
+font-family: 'Poppins', sans-serif;
+font-family: 'PT Serif', serif;
 
 }
-.quizCards{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+h1{
+    font-weight: 900;
+}
+.quizCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+ 
 }
 
+.toasts{
+width: 18rem;
+}
+
+.card {
+  box-shadow: 0px 0px 20px 20px rgb(224, 215, 215);
+  width: 18rem;
+  font-size: 3vh;
+}
+@media screen and (max-width: 320px) {
+  .card {
+    width: 14rem;
+  }
+}
