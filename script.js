@@ -21,8 +21,6 @@
 //     display(quizData);
 //   });
 
-
-
 // function display(data) {
 //   if (currentQuestion < data.length) {
 //     let card = data[currentQuestion];
@@ -62,7 +60,7 @@
 //     quizCards.appendChild(div);
 //   } else {
 //     quizCards.innerHTML = `<p>Quiz completed! Thank you.</p>
-   
+
 //     <h1> totalScore ${totalScore} / 10 </h1>`;
 //   }
 // }
@@ -93,7 +91,7 @@
 //     } else {
 //       console.log("wrong", totalScore--);
 
-//       quizCards.innerHTML = ` 
+//       quizCards.innerHTML = `
 //       <div class="toasts">
 //       <div class="toast-header">
 //        <h1> <strong class="me-auto">Incorrect.</strong></h1>
@@ -103,7 +101,7 @@
 //       ${correctAnswer}\n\nExplanation: ${explanation}
 //       </div>
 //       </div>
-      
+
 //       `;
 //     }
 //     setTimeout(() => {
@@ -116,48 +114,48 @@
 //   }
 // }
 
-
-
-
-
-  let quizCards = document.querySelector(".quizCards");
+let quizCards = document.querySelector(".quizCards");
 let start = document.querySelector(".start");
 let heading = document.querySelector(".heading");
 let body = document.querySelector("body");
 let currentQuestion = 0;
 let quizData;
 var totalScore = 0;
+let questionNo = 1;
 
 body.classList.add("myStyle");
-start.addEventListener("click", () => {
+start.addEventListener("click",()=> {
+
+  startPage();
+
+});
+function startPage() {
+  
   start.style.display = "none";
   quizCards.style.display = "flex";
   heading.style.display = "block";
   body.classList.remove("myStyle");
-});
+}
 
 
-
-
-fetch("https://quizapi.io/api/v1/questions?apiKey=y2gnQJ6bVwXjeADgOvbqIhWbSmDF43Nvu8W20IcI&limit=10&category=Linux&difficulty=easy")
-.then((resp) => resp.json())
-.then((data) => {
-  console.log(data);
-  // console.log(data[0].answers["answer_b"]);
-// const lo=data[0].correct_answer
-  // console.log(data[0].answers[data[0].correct_answer]);
-  quizData = data;
-  display(quizData);
-})
-.catch((error) => {
-  console.error("Error fetching quiz data:", error);
-});
-
-  
-
-
+fetch(
+  "https://quizapi.io/api/v1/questions?apiKey=y2gnQJ6bVwXjeADgOvbqIhWbSmDF43Nvu8W20IcI&limit=1&category=Linux&difficulty=easy"
+)
+  .then((resp) => resp.json())
+  .then((data) => {
+    console.log(data);
+    // console.log(data[0].answers["answer_b"]);
+    // const lo=data[0].correct_answer
+    // console.log(data[0].answers[data[0].correct_answer]);
+    quizData = data;
+    display(quizData);
+  })
+  .catch((error) => {
+    console.error("Error fetching quiz data:", error);
+  });
 
 function display(data) {
+  
   if (currentQuestion < data.length) {
     let card = data[currentQuestion];
     let div = document.createElement("div");
@@ -169,7 +167,7 @@ function display(data) {
     div.innerHTML = `
       <div class="card">
         <div class="card-body">
-           <h5 class="card-title">Question No: ${card.id}</h5>
+           <h5 class="card-title">Question No: ${questionNo}/ 10</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">${card.difficulty}</h6>
           <p class="card-text">${card.question}</p>
           <form onsubmit="submitBtn(event)">
@@ -208,10 +206,18 @@ function display(data) {
       </div>`;
     quizCards.appendChild(div);
   } else {
-    quizCards.innerHTML = `<p>Quiz completed! Thank you.</p>
+    quizCards.innerHTML = `<p class="btn" onclick="startPage()">Quiz completed! Thank you.</p>
    
     <h1> totalScore ${totalScore} / 10 </h1>`;
-    
+    if (totalScore > 10) {
+      quizCards.innerHTML = `<p class="btn" onclick="$startPage()">Quiz completed! Thank you.</p>
+   
+      <h1> totalScore ${totalScore} / 10 </h1>`;
+    } else {
+      quizCards.innerHTML = `<p class="btn" onclick="startPage()">Quiz completed! Loser</p>
+   
+      <h1> totalScore ${totalScore} / 10 </h1>`;
+    }
   }
 }
 
@@ -222,17 +228,19 @@ function submitBtn(event) {
   );
 
   if (selectedOption) {
-    
     // const userAnswer = selectedOption.value;
     const correctAnswer = selectedOption.getAttribute("data-target");
     const explanation = quizData[currentQuestion].explanation;
-    const correct_answer= quizData[currentQuestion].answers[quizData[currentQuestion].correct_answer];
+    const correct_answer =
+      quizData[currentQuestion].answers[
+        quizData[currentQuestion].correct_answer
+      ];
     console.log(correct_answer);
     // console.log(explanation);
     // if (userAnswer === correctAnswer) {
-      if (correctAnswer=="true") {
+    if (correctAnswer == "true") {
       // alert("Correct! Well done!");
-     
+
       quizCards.innerHTML = ` <div class="toasts">
       <div class="toast-header">
         <h1>correct Answer.</h1>
@@ -246,7 +254,7 @@ function submitBtn(event) {
       console.log("correct", totalScore++);
     } else {
       console.log("wrong", totalScore--);
-  
+
       quizCards.innerHTML = ` 
       <div class="toasts">
       <div class="toast-header">
@@ -261,9 +269,11 @@ function submitBtn(event) {
       `;
     }
     setTimeout(() => {
+      questionNo++;
       currentQuestion++;
       quizCards.innerHTML = "";
       display(quizData);
+     
     }, 5000);
   } else {
     alert("Please select an option.");
