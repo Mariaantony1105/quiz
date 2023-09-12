@@ -1,8 +1,18 @@
 let quizCards = document.querySelector(".quizCards");
+let start = document.querySelector(".start");
+let heading = document.querySelector(".heading");
+let body = document.querySelector("body");
 let currentQuestion = 0;
 let quizData;
-var totalScore=0;
+var totalScore = 0;
 
+body.classList.add("myStyle");
+start.addEventListener("click", () => {
+  start.style.display = "none";
+  quizCards.style.display = "flex";
+  heading.style.display = "block";
+  body.classList.remove("myStyle");
+});
 
 fetch("script.json")
   .then((res) => res.json())
@@ -22,7 +32,7 @@ function display(data) {
           <h6 class="card-subtitle mb-2 text-body-secondary">Easy</h6>
           <p class="card-text">${card.question}</p>
           <form onsubmit="submitBtn(event)">
-            <div class="mb-3">
+            <div class="">
               <label class="form-label">Select an option:</label>
             </div>
             <div class="form-check">
@@ -64,21 +74,27 @@ function submitBtn(event) {
   if (selectedOption) {
     const userAnswer = selectedOption.value;
     const correctAnswer = selectedOption.getAttribute("data-target");
-
+    const explanation = quizData[currentQuestion].Explanation;
     if (userAnswer === correctAnswer) {
-      alert("Correct! Well done!");
-      // correctAnswers++;
-    
-      console.log("correct",totalScore++);
+      // alert("Correct! Well done!");
+      quizCards.innerHTML = ` <div class="toasts">
+      <div class="toast-header">
+        <h1 class="me-auto">correct Answer.</h1>
+        your answer is:
+      </div>
+      <div class="toast-body">
+      ${correctAnswer}\n\nExplanation: ${explanation}
+      </div>
+      </div>`;
+
+      console.log("correct", totalScore++);
     } else {
-    //  wrongAnswers++;
-     console.log("wrong",totalScore--);
-      const explanation = quizData[currentQuestion].Explanation;
+      console.log("wrong", totalScore--);
 
       quizCards.innerHTML = ` 
       <div class="toasts">
       <div class="toast-header">
-        <strong class="me-auto">Incorrect.</strong>
+       <h1> <strong class="me-auto">Incorrect.</strong></h1>
         The correct answer is:
       </div>
       <div class="toast-body">
@@ -92,9 +108,10 @@ function submitBtn(event) {
       currentQuestion++;
       quizCards.innerHTML = "";
       display(quizData);
-      
-    }, 3000);
+    }, 5000);
   } else {
     alert("Please select an option.");
   }
 }
+
+
