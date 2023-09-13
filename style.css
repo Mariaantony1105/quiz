@@ -52,7 +52,9 @@ h1 {
   justify-content: space-around;
 }
 
-
+.display{
+  display: none;
+}
 
 
 .toasts {
