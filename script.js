@@ -139,7 +139,7 @@ function startPage() {
 
 
 fetch(
-  "https://quizapi.io/api/v1/questions?apiKey=y2gnQJ6bVwXjeADgOvbqIhWbSmDF43Nvu8W20IcI&limit=1&category=Linux&difficulty=easy"
+  "https://quizapi.io/api/v1/questions?apiKey=y2gnQJ6bVwXjeADgOvbqIhWbSmDF43Nvu8W20IcI&limit=10&category=Linux&difficulty=easy"
 )
   .then((resp) => resp.json())
   .then((data) => {
